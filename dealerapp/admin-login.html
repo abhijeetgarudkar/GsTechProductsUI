@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | My CCTV Store</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2575fc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background-color: #1b5edb;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .switch-link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #2575fc;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="Auth.loginAsAdmin()">Login as Admin</button>
+    <p class="error" id="error-msg">Invalid username or password!</p>
+    <p class="success" id="success-msg">Login successful! Redirecting...</p>
+    <p class="switch-link">
+      Not an admin?
+      <a href="user-login.html">Login as User</a>
+    </p>
+  </div>
+
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>
+
+

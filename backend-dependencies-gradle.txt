@@ -1,0 +1,26 @@
+// Add these dependencies to your build.gradle (or build.gradle.kts)
+
+dependencies {
+    // Spring Boot Starter Web (for REST controllers)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // Spring Boot Starter Data JPA (for UserRepository)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    // Spring Boot Starter Security (for PasswordEncoder - BCryptPasswordEncoder)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    
+    // Database Driver - Choose one based on your database
+    // For MySQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    
+    // OR For PostgreSQL
+    // runtimeOnly 'org.postgresql:postgresql'
+    
+    // OR For H2 (for testing/development)
+    // runtimeOnly 'com.h2database:h2'
+    
+    // Spring Boot Starter Validation (optional but recommended)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+}
+

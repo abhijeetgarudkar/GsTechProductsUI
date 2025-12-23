@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 80px;
+      background-color: #f8f9fa;
+    }
+    .btn-custom {
+      min-width: 140px;
+      margin: 10px;
+      text-transform: capitalize;
+    }
+    .btn-darkblue {
+      background-color: #005a9e;
+      color: #fff;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 576px) {
+      .btn-custom {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item me-2">
+            <a href="user-login.html" class="btn btn-outline-primary btn-sm" id="userLoginLink">User Login</a>
+          </li>
+          <li class="nav-item me-2">
+            <a href="admin-login.html" class="btn btn-outline-secondary btn-sm" id="adminLoginLink">Admin Login</a>
+          </li>
+          <li class="nav-item d-none" id="logoutNavItem">
+            <button class="btn btn-outline-danger btn-sm" onclick="Auth.clearAuth(); window.location.reload();">
+              Logout
+            </button>
+          </li>
+        </ul>
+      
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container text-center bg-white p-4 rounded-4 shadow-sm">
+    <h1>First Page</h1>
+
+    <!-- Camera Section -->
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-md-10">
+        <a href="hddomecompany.html" class="btn btn-primary btn-custom">HD Dome Camera</a>
+        <a href="hdbulletcompany.html" class="btn btn-primary btn-custom">HD Bullet Camera</a>
+        <a href="ipdomecompany.html" class="btn btn-primary btn-custom">IP Dome Camera</a>
+        <a href="ipbulletcompany.html" class="btn btn-primary btn-custom">IP Bullet Camera</a>
+      </div>
+    </div>
+
+    <!-- DVR Section -->
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-md-10">
+        <a href="4chdvr.html" class="btn btn-primary btn-custom">4 CH DVR</a>
+        <a href="8chdvr.html" class="btn btn-primary btn-custom">8 CH DVR</a>
+        <a href="16chdvr.html" class="btn btn-primary btn-custom">16 CH DVR</a>
+        <a href="32chdvr.html" class="btn btn-primary btn-custom">32 CH DVR</a>
+      </div>
+    </div>
+
+    <!-- Accessories Section -->
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-md-10">
+        <a href="cable.html" class="btn btn-primary btn-custom">3+1 Cable</a>
+        <a href="accessories.html" class="btn btn-primary btn-custom">Connector/SMPS/POE</a>
+        <a href="dvrrack.html" class="btn btn-primary btn-custom">DVR Rack</a>
+        <a href="monitor.html" class="btn btn-primary btn-custom">Monitor</a>
+      </div>
+    </div>
+
+    <!-- Wireless Section -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10">
+        <button class="btn btn-primary btn-custom">WiFi Camera</button>
+        <button class="btn btn-primary btn-custom">4G Camera</button>
+        <button class="btn btn-primary btn-custom">Solar Camera</button>
+        <a href="harddisk.html" class="btn btn-primary btn-custom">Hard Disk</a>
+        <a href="upload-products.html" class="btn btn-outline-success btn-custom d-none" id="uploadProductsBtn">
+          Upload Products
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script>
+    // Toggle admin-only upload button and login/logout buttons
+    document.addEventListener('DOMContentLoaded', function () {
+      const uploadBtn = document.getElementById('uploadProductsBtn');
+      const logoutNavItem = document.getElementById('logoutNavItem');
+      const adminLoginLink = document.getElementById('adminLoginLink');
+      const userLoginLink = document.getElementById('userLoginLink');
+
+      try {
+        if (Auth && Auth.isAdmin && Auth.isAdmin()) {
+          if (uploadBtn) uploadBtn.classList.remove('d-none');
+        }
+        const authInfo = (function () {
+          try {
+            return JSON.parse(localStorage.getItem('gstech_auth') || 'null');
+          } catch (e) {
+            return null;
+          }
+        })();
+
+        if (authInfo && authInfo.username) {
+          if (logoutNavItem) logoutNavItem.classList.remove('d-none');
+          if (adminLoginLink) adminLoginLink.classList.add('d-none');
+          if (userLoginLink) userLoginLink.classList.add('d-none');
+        }
+      } catch (e) {
+        console.warn('Auth not available on firstpage:', e);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | My Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+     
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2575fc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .login-box button:hover {
+      background-color: #1b5edb;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+      font-size: 14px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="login()">Login</button>
+    <p class="error" id="error-msg">Invalid username or password!</p>
+    <p class="success" id="success-msg">Login successful! Redirecting...</p>
+  </div>
+
+  <script>
+    // Static credentials
+    const VALID_USERNAME = "gstech";
+    const VALID_PASSWORD = "gstech@123";
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("error-msg");
+      const successMsg = document.getElementById("success-msg");
+
+      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        errorMsg.style.display = "none";
+        successMsg.style.display = "block";
+        
+        // Redirect after a short delay (optional)
+        setTimeout(() => {
+          window.location.href = "firstpage.html"; // change to your page
+        }, 1500);
+      } else {
+        successMsg.style.display = "none";
+        errorMsg.style.display = "block";
+      }
+    }
+  </script>
+</body>
+</html>
