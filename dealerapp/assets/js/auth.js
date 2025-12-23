@@ -3,8 +3,8 @@
   const AUTH_STORAGE_KEY = 'gstech_auth';
 
   const LOGIN_ENDPOINTS = {
-    ADMIN: `${API_BASE_URL}/admin/login`, // TODO: adjust to your real admin login endpoint
-    USER: `${API_BASE_URL}/user/login`, // TODO: adjust to your real user login endpoint
+    ADMIN: `${API_BASE_URL}/admin/login`,
+    USER: `${API_BASE_URL}/user/login`,
   };
 
   const saveAuth = (auth) => {
@@ -30,7 +30,7 @@
   };
 
   const redirectAfterLogin = (role) => {
-    // Both admin and user go to main product menu; admin sees extra upload link
+    // Redirect to firstpage.html after successful login
     window.location.href = 'firstpage.html';
   };
 
@@ -67,6 +67,9 @@
       if (errorMsg) errorMsg.style.display = 'none';
       if (successMsg) successMsg.style.display = 'none';
 
+      console.log('🔐 Attempting login to:', endpoint);
+      console.log('📤 Request payload:', { username, password: '***' });
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -75,11 +78,17 @@
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('📥 Response status:', response.status);
+      console.log('📥 Response headers:', Object.fromEntries([...response.headers.entries()]));
+
       if (!response.ok) {
-        throw new Error(`Login failed with status ${response.status}`);
+        const errorText = await response.text();
+        console.error('❌ Login error response:', errorText);
+        throw new Error(`Login failed with status ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('✅ Login response data:', data);
       // Expecting something like { token: '...', role: 'ADMIN' | 'USER', username: '...' }
       const authInfo = {
         token: data.token || data.accessToken || '',
@@ -103,7 +112,13 @@
     } catch (error) {
       console.error('Login error:', error);
       if (errorMsg) {
-        errorMsg.textContent = 'Login failed. Please check your credentials.';
+        if (error.message.includes('403')) {
+          errorMsg.textContent = '403 Forbidden: Access denied. Check backend CORS settings or credentials.';
+        } else if (error.message.includes('Failed to fetch')) {
+          errorMsg.textContent = 'Cannot connect to server. Check if backend is running on port 8080.';
+        } else {
+          errorMsg.textContent = `Login failed: ${error.message}`;
+        }
         errorMsg.style.display = 'block';
       }
       if (successMsg) successMsg.style.display = 'none';
@@ -150,7 +165,6 @@
     isAdmin,
     clearAuth,
     getAuthToken,
+    getAuth, // Added: expose getAuth for debugging
   };
 })();
-
-

@@ -3,29 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>First Page</title>
+  <title>GSTech CCTV Store</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       padding-top: 80px;
-      background-color: #f8f9fa;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
     }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Welcome Page Styles */
+    .welcome-container {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .welcome-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 40px;
+    }
+    
+    .login-btn-large {
+      padding: 15px 50px;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .login-btn-large:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    /* Protected Content Styles */
+    .content-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
     .btn-custom {
       min-width: 140px;
       margin: 10px;
       text-transform: capitalize;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
     }
-    .btn-darkblue {
-      background-color: #005a9e;
-      color: #fff;
+    
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
+    
     h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 2rem;
+      color: #333;
+      font-weight: 700;
     }
+    
+    .section-title {
+      font-size: 1.3rem;
+      color: #667eea;
+      font-weight: 600;
+      margin: 30px 0 20px 0;
+    }
+    
     @media (max-width: 576px) {
       .btn-custom {
         min-width: 100%;
+      }
+      .welcome-title {
+        font-size: 2.5rem;
+      }
+      .welcome-card {
+        padding: 40px 20px;
       }
     }
   </style>
@@ -33,105 +129,190 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item me-2">
-            <a href="user-login.html" class="btn btn-outline-primary btn-sm" id="userLoginLink">User Login</a>
-          </li>
-          <li class="nav-item me-2">
-            <a href="admin-login.html" class="btn btn-outline-secondary btn-sm" id="adminLoginLink">Admin Login</a>
-          </li>
-          <li class="nav-item d-none" id="logoutNavItem">
-            <button class="btn btn-outline-danger btn-sm" onclick="Auth.clearAuth(); window.location.reload();">
-              Logout
-            </button>
-          </li>
-        </ul>
-      
+      <a class="navbar-brand fw-bold" href="#" style="color: #667eea; font-size: 1.5rem;">
+        🎥 GSTech CCTV
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <!-- Login Button (shown when logged out) -->
+        <li class="nav-item me-2" id="loginNav">
+          <a href="user-login.html" class="btn btn-outline-primary btn-sm">Login</a>
+        </li>
+        
+        <!-- User Info and Logout (shown when logged in) -->
+        <li class="nav-item me-2 d-none" id="userInfoNav">
+          <span class="navbar-text me-3">
+            Welcome, <strong id="usernameDisplay"></strong>
+          </span>
+        </li>
+        <li class="nav-item d-none" id="logoutNav">
+          <button class="btn btn-danger btn-sm" onclick="logout()">
+            Logout
+          </button>
+        </li>
+      </ul>
     </div>
   </nav>
 
-  <!-- Main Container -->
-  <div class="container text-center bg-white p-4 rounded-4 shadow-sm">
-    <h1>First Page</h1>
-
-    <!-- Camera Section -->
-    <div class="row justify-content-center mb-3">
-      <div class="col-12 col-md-10">
-        <a href="hddomecompany.html" class="btn btn-primary btn-custom">HD Dome Camera</a>
-        <a href="hdbulletcompany.html" class="btn btn-primary btn-custom">HD Bullet Camera</a>
-        <a href="ipdomecompany.html" class="btn btn-primary btn-custom">IP Dome Camera</a>
-        <a href="ipbulletcompany.html" class="btn btn-primary btn-custom">IP Bullet Camera</a>
+  <!-- Welcome Page (shown when logged out) -->
+  <div id="welcomePage" class="welcome-container">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="welcome-card">
+            <h1 class="welcome-title">Welcome to GSTech</h1>
+            <p class="welcome-subtitle">Your trusted partner for premium CCTV solutions</p>
+            <p class="text-muted mb-4">Access our complete catalog of surveillance equipment, DVRs, and accessories</p>
+            <a href="user-login.html" class="btn btn-primary login-btn-large">
+              Login to Continue
+            </a>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- DVR Section -->
-    <div class="row justify-content-center mb-3">
-      <div class="col-12 col-md-10">
-        <a href="4chdvr.html" class="btn btn-primary btn-custom">4 CH DVR</a>
-        <a href="8chdvr.html" class="btn btn-primary btn-custom">8 CH DVR</a>
-        <a href="16chdvr.html" class="btn btn-primary btn-custom">16 CH DVR</a>
-        <a href="32chdvr.html" class="btn btn-primary btn-custom">32 CH DVR</a>
-      </div>
-    </div>
+  <!-- Protected Content (shown when logged in) -->
+  <div id="protectedContent" class="d-none">
+    <div class="container">
+      <div class="content-container">
+        <h1>Product Catalog</h1>
 
-    <!-- Accessories Section -->
-    <div class="row justify-content-center mb-3">
-      <div class="col-12 col-md-10">
-        <a href="cable.html" class="btn btn-primary btn-custom">3+1 Cable</a>
-        <a href="accessories.html" class="btn btn-primary btn-custom">Connector/SMPS/POE</a>
-        <a href="dvrrack.html" class="btn btn-primary btn-custom">DVR Rack</a>
-        <a href="monitor.html" class="btn btn-primary btn-custom">Monitor</a>
-      </div>
-    </div>
+        <!-- Camera Section -->
+        <h3 class="section-title">📹 Cameras</h3>
+        <div class="row justify-content-center mb-3">
+          <div class="col-12 col-md-10">
+            <a href="hddomecompany.html" class="btn btn-primary btn-custom">HD Dome Camera</a>
+            <a href="hdbulletcompany.html" class="btn btn-primary btn-custom">HD Bullet Camera</a>
+            <a href="ipdomecompany.html" class="btn btn-primary btn-custom">IP Dome Camera</a>
+            <a href="ipbulletcompany.html" class="btn btn-primary btn-custom">IP Bullet Camera</a>
+          </div>
+        </div>
 
-    <!-- Wireless Section -->
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10">
-        <button class="btn btn-primary btn-custom">WiFi Camera</button>
-        <button class="btn btn-primary btn-custom">4G Camera</button>
-        <button class="btn btn-primary btn-custom">Solar Camera</button>
-        <a href="harddisk.html" class="btn btn-primary btn-custom">Hard Disk</a>
-        <a href="upload-products.html" class="btn btn-outline-success btn-custom d-none" id="uploadProductsBtn">
-          Upload Products
-        </a>
+        <!-- DVR Section -->
+        <h3 class="section-title">📀 DVR Systems</h3>
+        <div class="row justify-content-center mb-3">
+          <div class="col-12 col-md-10">
+            <a href="4chdvr.html" class="btn btn-success btn-custom">4 CH DVR</a>
+            <a href="8chdvr.html" class="btn btn-success btn-custom">8 CH DVR</a>
+            <a href="16chdvr.html" class="btn btn-success btn-custom">16 CH DVR</a>
+            <a href="32chdvr.html" class="btn btn-success btn-custom">32 CH DVR</a>
+          </div>
+        </div>
+
+        <!-- Accessories Section -->
+        <h3 class="section-title">🔌 Accessories</h3>
+        <div class="row justify-content-center mb-3">
+          <div class="col-12 col-md-10">
+            <a href="cable.html" class="btn btn-info btn-custom">3+1 Cable</a>
+            <a href="accessories.html" class="btn btn-info btn-custom">Connector/SMPS/POE</a>
+            <a href="dvrrack.html" class="btn btn-info btn-custom">DVR Rack</a>
+            <a href="monitor.html" class="btn btn-info btn-custom">Monitor</a>
+          </div>
+        </div>
+
+        <!-- Wireless & Storage Section -->
+        <h3 class="section-title">📡 Wireless & Storage</h3>
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10">
+            <button class="btn btn-warning btn-custom">WiFi Camera</button>
+            <button class="btn btn-warning btn-custom">4G Camera</button>
+            <button class="btn btn-warning btn-custom">Solar Camera</button>
+            <a href="harddisk.html" class="btn btn-warning btn-custom">Hard Disk</a>
+
+            <!-- Admin Only -->
+            <a href="upload-products.html" class="btn btn-danger btn-custom d-none" id="uploadProductsBtn">
+              📤 Upload Products
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/auth.js"></script>
+  <!-- Removed firstpage.js as logic is built into this file -->
   <script>
-    // Toggle admin-only upload button and login/logout buttons
-    document.addEventListener('DOMContentLoaded', function () {
-      const uploadBtn = document.getElementById('uploadProductsBtn');
-      const logoutNavItem = document.getElementById('logoutNavItem');
-      const adminLoginLink = document.getElementById('adminLoginLink');
-      const userLoginLink = document.getElementById('userLoginLink');
+    const AUTH_STORAGE_KEY = 'gstech_auth';
 
-      try {
-        if (Auth && Auth.isAdmin && Auth.isAdmin()) {
-          if (uploadBtn) uploadBtn.classList.remove('d-none');
-        }
-        const authInfo = (function () {
-          try {
-            return JSON.parse(localStorage.getItem('gstech_auth') || 'null');
-          } catch (e) {
-            return null;
-          }
-        })();
-
-        if (authInfo && authInfo.username) {
-          if (logoutNavItem) logoutNavItem.classList.remove('d-none');
-          if (adminLoginLink) adminLoginLink.classList.add('d-none');
-          if (userLoginLink) userLoginLink.classList.add('d-none');
-        }
-      } catch (e) {
-        console.warn('Auth not available on firstpage:', e);
-      }
+    // Check login status on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 Firstpage loaded, checking auth status...');
+      checkLoginStatus();
     });
+
+    function getAuthInfo() {
+      try {
+        const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+        const auth = raw ? JSON.parse(raw) : null;
+        console.log('🔍 Auth info from storage:', auth);
+        return auth;
+      } catch (e) {
+        console.error('❌ Failed to parse auth info', e);
+        return null;
+      }
+    }
+
+    function checkLoginStatus() {
+      const authInfo = getAuthInfo();
+      
+      if (authInfo && authInfo.username) {
+        console.log('✅ User is logged in:', authInfo.username);
+        showProtectedContent(authInfo.username, authInfo.role);
+      } else {
+        console.log('❌ No user logged in, showing welcome page');
+        showWelcomePage();
+      }
+    }
+
+    function showWelcomePage() {
+      console.log('📄 Displaying welcome page');
+      document.getElementById('welcomePage').classList.remove('d-none');
+      document.getElementById('protectedContent').classList.add('d-none');
+      
+      // Show login button
+      document.getElementById('loginNav').classList.remove('d-none');
+      
+      // Hide logout button
+      document.getElementById('logoutNav').classList.add('d-none');
+      document.getElementById('userInfoNav').classList.add('d-none');
+    }
+
+    function showProtectedContent(username, role) {
+      console.log('🔓 Displaying protected content for:', username, 'Role:', role);
+      document.getElementById('welcomePage').classList.add('d-none');
+      document.getElementById('protectedContent').classList.remove('d-none');
+      
+      // Hide login button
+      document.getElementById('loginNav').classList.add('d-none');
+      
+      // Show logout button and user info
+      document.getElementById('logoutNav').classList.remove('d-none');
+      document.getElementById('userInfoNav').classList.remove('d-none');
+      document.getElementById('usernameDisplay').textContent = username;
+      
+      // Show admin button if admin (check for ADMIN in uppercase)
+      if (role && role.toUpperCase() === 'ADMIN') {
+        console.log('👑 Admin detected, showing upload button');
+        document.getElementById('uploadProductsBtn').classList.remove('d-none');
+      }
+    }
+
+    function logout() {
+      console.log('🚪 Logging out...');
+      // Clear auth using the Auth helper from auth.js
+      if (window.Auth && typeof window.Auth.clearAuth === 'function') {
+        window.Auth.clearAuth();
+      } else {
+        // Fallback: clear manually
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      }
+      
+      // Redirect to welcome page
+      showWelcomePage();
+    }
   </script>
 </body>
 </html>
