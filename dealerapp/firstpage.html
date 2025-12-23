@@ -223,7 +223,7 @@
 
             <!-- Admin Only -->
             <a href="upload-products.html" class="btn btn-danger btn-custom d-none" id="uploadProductsBtn">
-              📤 Upload Products
+              Upload Products
             </a>
           </div>
         </div>
@@ -239,7 +239,7 @@
 
     // Check login status on page load
     window.addEventListener('DOMContentLoaded', () => {
-      console.log('🚀 Firstpage loaded, checking auth status...');
+      console.log('Firstpage loaded, checking auth status...');
       checkLoginStatus();
     });
 
@@ -247,10 +247,10 @@
       try {
         const raw = localStorage.getItem(AUTH_STORAGE_KEY);
         const auth = raw ? JSON.parse(raw) : null;
-        console.log('🔍 Auth info from storage:', auth);
+        console.log('Auth info from storage:', auth);
         return auth;
       } catch (e) {
-        console.error('❌ Failed to parse auth info', e);
+        console.error('Failed to parse auth info', e);
         return null;
       }
     }
@@ -259,16 +259,16 @@
       const authInfo = getAuthInfo();
       
       if (authInfo && authInfo.username) {
-        console.log('✅ User is logged in:', authInfo.username);
+        console.log('User is logged in:', authInfo.username);
         showProtectedContent(authInfo.username, authInfo.role);
       } else {
-        console.log('❌ No user logged in, showing welcome page');
+        console.log('No user logged in, showing welcome page');
         showWelcomePage();
       }
     }
 
     function showWelcomePage() {
-      console.log('📄 Displaying welcome page');
+      console.log('Displaying welcome page');
       document.getElementById('welcomePage').classList.remove('d-none');
       document.getElementById('protectedContent').classList.add('d-none');
       
@@ -281,7 +281,7 @@
     }
 
     function showProtectedContent(username, role) {
-      console.log('🔓 Displaying protected content for:', username, 'Role:', role);
+      console.log('Displaying protected content for:', username, 'Role:', role);
       document.getElementById('welcomePage').classList.add('d-none');
       document.getElementById('protectedContent').classList.remove('d-none');
       
@@ -295,13 +295,13 @@
       
       // Show admin button if admin (check for ADMIN in uppercase)
       if (role && role.toUpperCase() === 'ADMIN') {
-        console.log('👑 Admin detected, showing upload button');
+        console.log('Admin detected, showing upload button');
         document.getElementById('uploadProductsBtn').classList.remove('d-none');
       }
     }
 
     function logout() {
-      console.log('🚪 Logging out...');
+      console.log('Logging out...');
       // Clear auth using the Auth helper from auth.js
       if (window.Auth && typeof window.Auth.clearAuth === 'function') {
         window.Auth.clearAuth();

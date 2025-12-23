@@ -67,8 +67,8 @@
       if (errorMsg) errorMsg.style.display = 'none';
       if (successMsg) successMsg.style.display = 'none';
 
-      console.log('🔐 Attempting login to:', endpoint);
-      console.log('📤 Request payload:', { username, password: '***' });
+      console.log('Attempting login to:', endpoint);
+      console.log('Request payload:', { username, password: '***' });
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -78,17 +78,17 @@
         body: JSON.stringify({ username, password }),
       });
 
-      console.log('📥 Response status:', response.status);
-      console.log('📥 Response headers:', Object.fromEntries([...response.headers.entries()]));
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries([...response.headers.entries()]));
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Login error response:', errorText);
+        console.error('Login error response:', errorText);
         throw new Error(`Login failed with status ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('✅ Login response data:', data);
+      console.log('Login response data:', data);
       // Expecting something like { token: '...', role: 'ADMIN' | 'USER', username: '...' }
       const authInfo = {
         token: data.token || data.accessToken || '',
