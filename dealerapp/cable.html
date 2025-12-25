@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,37 +12,36 @@
       padding-top: 80px;
       background-color: #f8f9fa;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 30px;
       font-weight: 600;
     }
+
     .btn-custom {
       min-width: 100px;
       border-radius: 6px;
-      margin: 2px;
+      margin: 3px;
     }
+
     .table {
       background-color: #fff;
     }
   </style>
 </head>
+
 <body>
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a href="firstpage.html" class="btn btn-primary btn-custom">Home</a>
-          </li>
-        </ul>
+      <div class="ms-auto">
+        <a href="firstpage.html" class="btn btn-primary btn-custom">Home</a>
+        <a href="cart.html" class="btn btn-outline-success btn-custom">
+          🛒 Cart
+        </a>
       </div>
     </div>
   </nav>
@@ -84,4 +84,5 @@
     });
   </script>
 </body>
+
 </html>

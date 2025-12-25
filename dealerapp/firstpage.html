@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,12 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
     }
-    
+
     .navbar {
       background: rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(10px);
     }
-    
+
     /* Welcome Page Styles */
     .welcome-container {
       min-height: 80vh;
@@ -25,7 +26,7 @@
       justify-content: center;
       text-align: center;
     }
-    
+
     .welcome-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -34,18 +35,19 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
       animation: fadeInUp 0.8s ease-out;
     }
-    
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
         transform: translateY(30px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-    
+
     .welcome-title {
       font-size: 3.5rem;
       font-weight: 700;
@@ -55,13 +57,13 @@
       background-clip: text;
       margin-bottom: 20px;
     }
-    
+
     .welcome-subtitle {
       font-size: 1.3rem;
       color: #666;
       margin-bottom: 40px;
     }
-    
+
     .login-btn-large {
       padding: 15px 50px;
       font-size: 1.2rem;
@@ -70,12 +72,12 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
-    
+
     .login-btn-large:hover {
       transform: translateY(-3px);
       box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
-    
+
     /* Protected Content Styles */
     .content-container {
       background: rgba(255, 255, 255, 0.95);
@@ -83,7 +85,7 @@
       padding: 40px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     }
-    
+
     .btn-custom {
       min-width: 140px;
       margin: 10px;
@@ -93,39 +95,42 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
-    
+
     .btn-custom:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
       color: #333;
       font-weight: 700;
     }
-    
+
     .section-title {
       font-size: 1.3rem;
       color: #667eea;
       font-weight: 600;
       margin: 30px 0 20px 0;
     }
-    
+
     @media (max-width: 576px) {
       .btn-custom {
         min-width: 100%;
       }
+
       .welcome-title {
         font-size: 2.5rem;
       }
+
       .welcome-card {
         padding: 40px 20px;
       }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Navbar -->
@@ -135,11 +140,18 @@
         🎥 GSTech CCTV
       </a>
       <ul class="navbar-nav ms-auto">
+        <!-- Cart Button -->
+        <li class="nav-item me-2">
+          <a href="cart.html" class="btn btn-outline-success btn-sm">
+            🛒 Cart
+          </a>
+        </li>
+
         <!-- Login Button (shown when logged out) -->
         <li class="nav-item me-2" id="loginNav">
           <a href="user-login.html" class="btn btn-outline-primary btn-sm">Login</a>
         </li>
-        
+
         <!-- User Info and Logout (shown when logged in) -->
         <li class="nav-item me-2 d-none" id="userInfoNav">
           <span class="navbar-text me-3">
@@ -257,7 +269,7 @@
 
     function checkLoginStatus() {
       const authInfo = getAuthInfo();
-      
+
       if (authInfo && authInfo.username) {
         console.log('User is logged in:', authInfo.username);
         showProtectedContent(authInfo.username, authInfo.role);
@@ -271,10 +283,10 @@
       console.log('Displaying welcome page');
       document.getElementById('welcomePage').classList.remove('d-none');
       document.getElementById('protectedContent').classList.add('d-none');
-      
+
       // Show login button
       document.getElementById('loginNav').classList.remove('d-none');
-      
+
       // Hide logout button
       document.getElementById('logoutNav').classList.add('d-none');
       document.getElementById('userInfoNav').classList.add('d-none');
@@ -284,15 +296,15 @@
       console.log('Displaying protected content for:', username, 'Role:', role);
       document.getElementById('welcomePage').classList.add('d-none');
       document.getElementById('protectedContent').classList.remove('d-none');
-      
+
       // Hide login button
       document.getElementById('loginNav').classList.add('d-none');
-      
+
       // Show logout button and user info
       document.getElementById('logoutNav').classList.remove('d-none');
       document.getElementById('userInfoNav').classList.remove('d-none');
       document.getElementById('usernameDisplay').textContent = username;
-      
+
       // Show admin button if admin (check for ADMIN in uppercase)
       if (role && role.toUpperCase() === 'ADMIN') {
         console.log('Admin detected, showing upload button');
@@ -309,10 +321,11 @@
         // Fallback: clear manually
         localStorage.removeItem(AUTH_STORAGE_KEY);
       }
-      
+
       // Redirect to welcome page
       showWelcomePage();
     }
   </script>
 </body>
+
 </html>
