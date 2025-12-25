@@ -182,16 +182,18 @@
 
   const handleAddToCart = async (details) => {
     console.log('Adding to cart:', details);
-
+  
     const payload = {
-      quantity: details.quantity,
       product: {
-        id: Number(details.productId),
-        name: details.productName,
-        price: Number(details.productPrice),
+        companyName: details.companyName,
+        productName: details.productName,
+        productPrice: Number(details.productPrice),
       },
+      quantity: Number(details.quantity),
     };
-
+  
+    console.log('Sending payload:', payload);
+  
     const auth = getStoredAuth();
     const headers = {
       'Content-Type': 'application/json',
@@ -199,24 +201,24 @@
     if (auth && auth.token) {
       headers['Authorization'] = 'Bearer ' + auth.token;
     }
-
+  
     try {
       const response = await fetch(CART_ENDPOINT, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         throw new Error(`Add to cart failed with status ${response.status}`);
       }
-
+  
       alert(`Added ${details.quantity} x ${details.productName} to cart!`);
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Failed to add item to cart. Please try again.');
     }
-  };
+  };  
 
   window.initProductTable = function initProductTable(userConfig = {}) {
     const config = {
@@ -294,4 +296,3 @@
       });
   };
 })();
-
