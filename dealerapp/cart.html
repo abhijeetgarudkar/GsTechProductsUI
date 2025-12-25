@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Your Cart</title>
@@ -10,103 +11,106 @@
       padding-top: 80px;
       background-color: #f8f9fa;
     }
+
     .table {
       background-color: #fff;
     }
   </style>
 </head>
+
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
 
-    <div class="ms-auto">
-      <a href="firstpage.html" class="btn btn-primary btn-custom">Home</a>
+      <div class="ms-auto">
+        <a href="firstpage.html" class="btn btn-primary btn-custom">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Cart Content -->
+  <div class="container mt-4">
+    <h2 class="text-center mb-4">🛒 Your Cart</h2>
+
+    <div class="table-responsive">
+      <table class="table table-bordered text-center align-middle shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Product</th>
+            <th>Company</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="cartTableBody">
+          <tr>
+            <td colspan="5">Loading cart...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-end fw-bold fs-5">
+      Total Amount: ₹<span id="cartTotal">0</span>
+    </div>
+
+    <div class="text-end mt-3">
+      <a href="checkout.html" class="btn btn-success btn-lg">Proceed to Checkout</a>
     </div>
   </div>
-</nav>
 
-<!-- Cart Content -->
-<div class="container mt-4">
-  <h2 class="text-center mb-4">🛒 Your Cart</h2>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <div class="table-responsive">
-    <table class="table table-bordered text-center align-middle shadow-sm">
-      <thead class="table-light">
-        <tr>
-          <th>Product</th>
-          <th>Company</th>
-          <th>Price</th>
-          <th>Qty</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody id="cartTableBody">
-        <tr>
-          <td colspan="5">Loading cart...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <script>
+    const CART_ITEMS_API = "http://localhost:8080/gstechsecurity/cartItems";
 
-  <div class="text-end fw-bold fs-5">
-    Total Amount: ₹<span id="cartTotal">0</span>
-  </div>
+    function loadCart() {
+      const tbody = document.getElementById("cartTableBody");
+      const totalSpan = document.getElementById("cartTotal");
 
-  <div class="text-end mt-3">
-    <button class="btn btn-success btn-lg">Checkout</button>
-  </div>
-</div>
+      fetch(CART_ITEMS_API)
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to load cart");
+          return res.json();
+        })
+        .then(data => {
+          tbody.innerHTML = "";
+          let total = 0;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+          if (!data || !data.length) {
+            tbody.innerHTML = `<tr><td colspan="5">Cart is empty</td></tr>`;
+            totalSpan.textContent = "0";
+            return;
+          }
 
-<script>
-  const CART_ITEMS_API = "http://localhost:8080/gstechsecurity/cartItems";
-
-  function loadCart() {
-    const tbody = document.getElementById("cartTableBody");
-    const totalSpan = document.getElementById("cartTotal");
-
-    fetch(CART_ITEMS_API)
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load cart");
-        return res.json();
-      })
-      .then(data => {
-        tbody.innerHTML = "";
-        let total = 0;
-
-        if (!data || !data.length) {
-          tbody.innerHTML = `<tr><td colspan="5">Cart is empty</td></tr>`;
-          totalSpan.textContent = "0";
-          return;
-        }
-
-        data.forEach(item => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
+          data.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
             <td>${item.product.productName}</td>
             <td>${item.product.companyName}</td>
             <td>₹${item.product.productPrice}</td>
             <td>${item.quantity}</td>
             <td>₹${item.totalPrice}</td>
           `;
-          total += item.totalPrice;
-          tbody.appendChild(row);
+            total += item.totalPrice;
+            tbody.appendChild(row);
+          });
+
+          totalSpan.textContent = total;
+        })
+        .catch(err => {
+          console.error(err);
+          tbody.innerHTML = `<tr><td colspan="5">Error loading cart</td></tr>`;
         });
+    }
 
-        totalSpan.textContent = total;
-      })
-      .catch(err => {
-        console.error(err);
-        tbody.innerHTML = `<tr><td colspan="5">Error loading cart</td></tr>`;
-      });
-  }
-
-  loadCart();
-</script>
+    loadCart();
+  </script>
 
 </body>
+
 </html>

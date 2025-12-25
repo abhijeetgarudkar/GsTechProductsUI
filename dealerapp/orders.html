@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 80px;
+            background-color: #f8f9fa;
+        }
+
+        .btn-custom {
+            min-width: 100px;
+            border-radius: 6px;
+            margin: 3px;
+        }
+
+        .order-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .order-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-delivered {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-items {
+            margin-top: 10px;
+        }
+
+        .order-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">My CCTV Store</a>
+            <div class="ms-auto">
+                <a href="firstpage.html" class="btn btn-primary btn-custom">Home</a>
+                <a href="cart.html" class="btn btn-outline-success btn-custom">
+                    🛒 Cart
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Orders Content -->
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">📦 My Orders</h2>
+
+        <div id="ordersContainer">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading your orders...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const ORDERS_API = "http://localhost:8080/gstechsecurity/orders";
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function getStatusClass(status) {
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('pending')) return 'status-pending';
+            if (statusLower.includes('confirmed')) return 'status-confirmed';
+            if (statusLower.includes('delivered')) return 'status-delivered';
+            if (statusLower.includes('cancelled')) return 'status-cancelled';
+            return 'status-pending';
+        }
+
+        function loadOrders() {
+            const container = document.getElementById('ordersContainer');
+            let apiUrl = ORDERS_API;
+
+            // Get username from localStorage
+            try {
+                const authData = localStorage.getItem('gstech_auth');
+                if (authData) {
+                    const parsedAuth = JSON.parse(authData);
+                    if (parsedAuth && parsedAuth.username) {
+                        apiUrl = `${ORDERS_API}/${parsedAuth.username}`;
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not retrieve username for orders, using default endpoint', e);
+            }
+
+            fetch(apiUrl)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to load orders');
+                    return res.json();
+                })
+                .then(orders => {
+                    container.innerHTML = '';
+
+                    if (!orders || orders.length === 0) {
+                        container.innerHTML = `
+            <div class="text-center py-5">
+              <h4 class="text-muted">No orders found</h4>
+              <p>You haven't placed any orders yet.</p>
+              <a href="firstpage.html" class="btn btn-primary mt-3">Start Shopping</a>
+            </div>
+          `;
+                        return;
+                    }
+
+                    orders.forEach(order => {
+                        const orderCard = document.createElement('div');
+                        orderCard.className = 'order-card';
+
+                        let itemsHTML = '';
+                        if (order.items && order.items.length > 0) {
+                            itemsHTML = order.items.map(item => `
+              <div class="order-item">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <strong>${item.productName || item.product?.productName || 'Product'}</strong>
+                    <span class="text-muted ms-2">x${item.quantity}</span>
+                  </div>
+                  <div>₹${item.totalPrice || (item.price * item.quantity)}</div>
+                </div>
+              </div>
+            `).join('');
+                        }
+
+                        orderCard.innerHTML = `
+            <div class="order-header">
+              <div>
+                <h5 class="mb-1">Order #${order.orderId || order.id}</h5>
+                <small class="text-muted">${formatDate(order.orderDate || order.createdAt)}</small>
+              </div>
+              <span class="order-status ${getStatusClass(order.status || 'Pending')}">
+                ${order.status || 'Pending'}
+              </span>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <strong>Customer:</strong> ${order.customerName}<br>
+                <strong>Mobile:</strong> ${order.mobileNumber}<br>
+                <strong>Address:</strong> ${order.address}
+              </div>
+              <div class="col-md-6 text-md-end">
+                <h4 class="text-primary mb-0">₹${order.totalAmount || order.total || 0}</h4>
+                <small class="text-muted">Total Amount</small>
+              </div>
+            </div>
+
+            ${itemsHTML ? `
+              <div class="order-items">
+                <strong class="d-block mb-2">Order Items:</strong>
+                ${itemsHTML}
+              </div>
+            ` : ''}
+          `;
+
+                        container.appendChild(orderCard);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error loading orders:', err);
+                    container.innerHTML = `
+          <div class="alert alert-danger text-center" role="alert">
+            <h5>Error Loading Orders</h5>
+            <p>Unable to fetch your orders. Please try again later.</p>
+            <button class="btn btn-primary" onclick="loadOrders()">Retry</button>
+          </div>
+        `;
+                });
+        }
+
+        // Load orders on page load
+        loadOrders();
+    </script>
+
+</body>
+
+</html>
