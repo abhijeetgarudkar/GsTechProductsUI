@@ -1,5 +1,5 @@
 (() => {
-  const API_BASE_URL = 'http://localhost:8080/gstechsecurity';
+  const API_BASE_URL = window.AppConfig.BACKEND_BASE_URL + '/gstechsecurity';
   const AUTH_STORAGE_KEY = 'gstech_auth';
 
   const LOGIN_ENDPOINTS = {
@@ -115,7 +115,7 @@
         if (error.message.includes('403')) {
           errorMsg.textContent = '403 Forbidden: Access denied. Check backend CORS settings or credentials.';
         } else if (error.message.includes('Failed to fetch')) {
-          errorMsg.textContent = 'Cannot connect to server. Check if backend is running on port 8080.';
+          errorMsg.textContent = `Cannot connect to server at ${endpoint}. Check if backend is running on port 8080.`;
         } else {
           errorMsg.textContent = `Login failed: ${error.message}`;
         }

@@ -1,5 +1,5 @@
 (() => {
-  const DEFAULT_ENDPOINT = 'http://localhost:8080/gstechsecurity/products';
+  const DEFAULT_ENDPOINT = window.AppConfig.BACKEND_BASE_URL + '/gstechsecurity/products';
   const DEFAULT_TABLE_BODY_ID = 'productsTableBody';
   const DEFAULT_LOADING_MESSAGE = 'Loading products...';
   const DEFAULT_EMPTY_MESSAGE = 'No products found';
@@ -178,11 +178,11 @@
     }
   };
 
-  const CART_ENDPOINT = 'http://localhost:8080/gstechsecurity/product/addToCart';
+  const CART_ENDPOINT = window.AppConfig.BACKEND_BASE_URL + '/gstechsecurity/product/addToCart';
 
   const handleAddToCart = async (details) => {
     console.log('Adding to cart:', details);
-  
+
     const payload = {
       product: {
         companyName: details.companyName,
@@ -191,9 +191,9 @@
       },
       quantity: Number(details.quantity),
     };
-  
+
     console.log('Sending payload:', payload);
-  
+
     const auth = getStoredAuth();
     const headers = {
       'Content-Type': 'application/json',
@@ -201,24 +201,24 @@
     if (auth && auth.token) {
       headers['Authorization'] = 'Bearer ' + auth.token;
     }
-  
+
     try {
       const response = await fetch(CART_ENDPOINT, {
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Add to cart failed with status ${response.status}`);
       }
-  
+
       alert(`Added ${details.quantity} x ${details.productName} to cart!`);
     } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Failed to add item to cart. Please try again.');
     }
-  };  
+  };
 
   window.initProductTable = function initProductTable(userConfig = {}) {
     const config = {
@@ -227,10 +227,10 @@
       filterKeywords: toArray(userConfig.filterKeywords || userConfig.filterKeyword),
       companyFilters: toArray(
         userConfig.companyFilters ||
-          userConfig.companyFilter ||
-          userConfig.company ||
-          userConfig.brand ||
-          userConfig.brandName
+        userConfig.companyFilter ||
+        userConfig.company ||
+        userConfig.brand ||
+        userConfig.brandName
       ),
       emptyMessage: userConfig.emptyMessage || DEFAULT_EMPTY_MESSAGE,
       loadingMessage: userConfig.loadingMessage || DEFAULT_LOADING_MESSAGE,
