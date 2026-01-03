@@ -30,8 +30,8 @@
   };
 
   const redirectAfterLogin = (role) => {
-    // Redirect to firstpage.html after successful login
-    window.location.href = 'firstpage.html';
+    // Redirect to index.html after successful login
+    window.location.href = 'index.html';
   };
 
   const performLogin = async (role) => {
